@@ -2,7 +2,7 @@
 
 ## Tabular solution methods
 
-### Multi-armed bandits
+### [Multi-armed bandits](https://github.com/holounic/rl-cheatsheet/blob/main/text/tabular_solution_methods/multi_armed_bandits.md)
 
 ### Finite markov decision process
 
