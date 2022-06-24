@@ -6,7 +6,7 @@
 
 ### Finite markov decision process
 
-### Dynamic programming
+### [Dynamic programming](https://github.com/holounic/rl-cheatsheet/blob/main/code/DynamicProgramming.ipynb)
 
 ### Monte Carlo methods
 
