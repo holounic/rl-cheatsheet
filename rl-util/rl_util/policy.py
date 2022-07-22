@@ -37,6 +37,9 @@ class DeterministicPolicy(Policy):
     def __init__(self, transitions: dict):
         self.transitions = transitions
 
+    def update(self, s, a):
+        self.transitions[s] = a
+
     def p(self, a, s):
         return 1. if self.transitions[s] == a else 0
 
@@ -45,14 +48,14 @@ class DeterministicPolicy(Policy):
 
 
 class EpsSoftPolicy(Policy):
-    def __init__(self, state_actions: dict, eps: float, seed: int = 11):
+    def __init__(self, state_space: int, action_space: int, eps: float, seed: int = 11):
         self.eps = eps
         key = random.PRNGKey(seed)
         self.probs = {}
 
-        for state in state_actions:
+        for state in range(state_space):
             self.probs[state] = {}
-            actions = state_actions[state]
+            actions = range(action_space)
 
             action_probs = random.randint((key := random.split(key)[0]), (len(actions),), 1, 2 * len(actions) + 1)
             action_probs = action_probs / action_probs.sum()

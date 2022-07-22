@@ -1,9 +1,16 @@
 import jax.random as random
 import random as std_random
+import pandas as pd
+
+S = 'state'
+A = 'action'
+R = 'reward'
+P = 'probability'
+NS = 'next_state'
 
 class Markov:
     def __init__(self, transitions: dict, seed: int = 11):
-        self.transitions = transitions
+        self.transitions = pd.DataFrame(transitions)
         self.state_space = len(self.transitions)
         self.transition_probs = {}
         self.rewards = {}
@@ -81,26 +88,36 @@ class StateInfo:
 
 
 class MarkovEnv:
-    def __init__(self):
-        self.start = set()
-        self.terminal = set()
-        self.states = {}
+    def __init__(self, start: set, terminal: set, action_space: int, state_space: int):
+        self.start = start
+        self.terminal = terminal
+        self.transitions = pd.DataFrame({S: [], A: [], R: [], NS: [], P: []})
         self.state = None
+        self.__action_space = action_space
+        self.__state_space = state_space
 
-    def add_state(self, state, action, reward, next_state, probability):
-        info = self.states.get(state, StateInfo([], {}, {}, {}))
-        info.add_transition(action, next_state, reward, probability)
-        self.states[state] = info
+    def state_space(self):
+        return self.__state_space
+
+    def action_space(self):
+        return self.__action_space
+
+    def add_state(self, state, action, reward, next_state, probability=1.):
+        if state >= self.state_space() or action >= self.action_space() or next_state >= self.state_space():
+            raise Exception(f'Out of bounds: state space is {self.state_space()}, action space is {self.action_space()}')
+        self.transitions = self.transitions.append({S: state, A: action, R: reward, NS: next_state, P: probability}, ignore_index=True)
 
     def reset(self):
         self.state = std_random.choice(list(self.start))
         return self.state
 
     def step(self, action):
-        info = self.states[self.state]
-        next_state, reward = info.choice(action)
+        from_state = self.transitions.loc[(self.transitions[S] == self.state) & (self.transitions[A] == action)]
+        next_states, probabilities, rewards = from_state[NS], from_state[P], from_state[R]
+        i = std_random.choices(range(len(probabilities)), probabilities, k=1)[0]
+        next_state, reward = next_states.iloc[i], rewards.iloc[i]
         self.state = next_state
         return next_state, reward, (reward in self.terminal)
     
     def states(self):
-        return self.states.keys()
+        return self.transitions[S].unique()
