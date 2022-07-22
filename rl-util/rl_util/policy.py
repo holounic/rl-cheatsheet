@@ -52,6 +52,6 @@ class EpsSoftPolicy(StochasticPolicy):
         self.eps = eps
 
     def update(self, s, a):
-        n_actions = len(self.p.loc[self.p[s] == s])
+        n_actions = len(self.p.loc[self.p[S] == s])
         self.p.loc[self.p[S] == s, P] = self.eps / n_actions
         self.p.loc[(self.p[S] == s) & self.p[A] == a, P] = 1 - self.eps + self.eps / n_actions
