@@ -1,11 +1,6 @@
 import random
 import pandas as pd
-
-S = 'state'
-A = 'action'
-R = 'reward'
-P = 'probability'
-NS = 'next_state'
+from rl_util.common import S, A, R, NS, P
 
 
 class MarkovEnv:

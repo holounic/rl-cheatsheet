@@ -1,4 +1,6 @@
-import jax.random as random
+import pandas as pd
+import random
+from rl_util.common import S, A, P
 
 
 class Policy:
@@ -7,77 +9,49 @@ class Policy:
 
 
 class StochasticPolicy(Policy):
-    def __init__(self, state_actions: dict, seed: int = 11):
-        key = random.PRNGKey(seed)
-        self.probs = {}
+    def __init__(self, state_space: int, action_space: int):
+        self.p = pd.DataFrame({S: [], A: [], P: []})
 
-        for state in state_actions:
-            self.probs[state] = {}
-            actions = state_actions[state]
-
-            action_probs = random.randint((key := random.split(key)[0]), (len(actions),), 1, 2 * len(actions) + 1)
-            action_probs = action_probs / action_probs.sum()
-
-            for (action, prob) in zip(actions, action_probs):
-                self.probs[state][action] = prob
+        for state in range(state_space):
+            p = [random.uniform(0, 1) for _ in range(action_space)]
+            norm_factor = sum(p)
+            for action in range(action_space):
+                self.p = self.p.append({S: state, A: action, P: p[action] / norm_factor}, ignore_index=True)
 
     def p(self, a, s):
-        return self.probs[s][a]
+        return self.p.loc[(self.p[A] == a) & (self.p[S] == s)].sum()
 
     def __call__(self, s):
-        probs = self.probs[s]
-        max_a = probs.keys()[0]
-        for a in probs.keys():
-            if probs[a] > probs[max_a]:
-                max_a = a
-        return max_a
+        i = self.p.loc[self.p[S] == s][P].idxmax()
+        return self.p.iloc[i][A]
+
+    def update(self, s, a, p):
+        self.p.loc[(self.p[S] == s) & self.p[A] == a, P] = p
 
 
 class DeterministicPolicy(Policy):
-    def __init__(self, transitions: dict):
-        self.transitions = transitions
+    def __init__(self, state_space, action_space=None):
+        if action_space is None:
+            self.states = [0 for _ in range(state_space)]
+        else:
+            self.states = [random.randint(0, action_space - 1) for _ in range(state_space)]
 
     def update(self, s, a):
-        self.transitions[s] = a
+        self.states[s] = a
 
     def p(self, a, s):
-        return 1. if self.transitions[s] == a else 0
+        return 1. if self.states[s] == a else 0
 
     def __call__(self, s):
-        return self.transitions[s]
+        return self.states[s]
 
 
-class EpsSoftPolicy(Policy):
-    def __init__(self, state_space: int, action_space: int, eps: float, seed: int = 11):
+class EpsSoftPolicy(StochasticPolicy):
+    def __init__(self, state_space: int, action_space: int, eps: float):
+        super().__init__(state_space, action_space)
         self.eps = eps
-        key = random.PRNGKey(seed)
-        self.probs = {}
 
-        for state in range(state_space):
-            self.probs[state] = {}
-            actions = range(action_space)
-
-            action_probs = random.randint((key := random.split(key)[0]), (len(actions),), 1, 2 * len(actions) + 1)
-            action_probs = action_probs / action_probs.sum()
-
-            for (action, prob) in zip(actions, action_probs):
-                self.probs[state][action] = prob
-
-    def p(self, a, s):
-        return self.probs[s][a]
-
-    def __call__(self, s):
-        probs = self.probs[s]
-        max_a = probs.keys()[0]
-        for a in probs.keys():
-            if probs[a] > probs[max_a]:
-                max_a = a
-        return max_a
-
-    def update(self, s, best_a):
-        n_actions = len(self.probs[s])
-        a_star_prob = 1 - self.eps + self.eps / n_actions
-        other_prob = self.eps / n_actions
-
-        for action in self.probs[s].keys():
-            self.probs[s][action] = a_star_prob if action == best_a else other_prob
+    def update(self, s, a):
+        n_actions = len(self.p.loc[self.p[s] == s])
+        self.p.loc[self.p[S] == s, P] = self.eps / n_actions
+        self.p.loc[(self.p[S] == s) & self.p[A] == a, P] = 1 - self.eps + self.eps / n_actions

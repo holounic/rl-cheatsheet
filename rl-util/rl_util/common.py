@@ -1,0 +1,5 @@
+S = 'state'
+A = 'action'
+R = 'reward'
+P = 'probability'
+NS = 'next_state'
