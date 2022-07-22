@@ -38,7 +38,16 @@ class MarkovEnv:
         return int(next_state), reward, (self.state in self.terminal)
     
     def states(self):
-        return self.transitions[S].unique()
+        return self.transitions[S].unique().astype(int)
+
+    def next_states(self, s):
+        return self.transitions.loc[self.transitions[S] == s][NS].unique().astype(int)
+
+    def rewards(self, s):
+        return self.transitions.loc[self.transitions[S] == s][R].unique()
+
+    def actions(self, _):
+        return range(self.__action_space)
 
     def p(self, state, action, reward, next_state):
         result = self.transitions.loc[
