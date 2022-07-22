@@ -25,7 +25,7 @@ class MarkovEnv:
 
     def reset(self):
         self.state = random.choice(list(self.start))
-        return self.state
+        return int(self.state)
 
     def step(self, action):
         if self.state in self.terminal:
@@ -35,7 +35,7 @@ class MarkovEnv:
         i = random.choices(range(len(probabilities)), probabilities, k=1)[0]
         next_state, reward = next_states.iloc[i], rewards.iloc[i]
         self.state = next_state
-        return next_state, reward, (self.state in self.terminal)
+        return int(next_state), reward, (self.state in self.terminal)
     
     def states(self):
         return self.transitions[S].unique()
