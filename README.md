@@ -8,9 +8,9 @@
 
 ### [Dynamic programming](https://github.com/holounic/rl-cheatsheet/blob/main/code/DynamicProgramming.ipynb)
 
-### Monte Carlo methods
+### [Monte Carlo methods](https://github.com/holounic/rl-cheatsheet/blob/main/code/MonteCarlo.ipynb)
 
-### Temporal-difference learning
+### [Temporal-difference learning](https://github.com/holounic/rl-cheatsheet/blob/main/code/TemporalDifference.ipynb)
 
 ### N-step Bootstrapping
 
