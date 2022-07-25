@@ -12,6 +12,9 @@ class MarkovEnv:
         self.__action_space = action_space
         self.__state_space = state_space
 
+    def is_terminal(self, state):
+        return state in self.terminal
+
     def state_space(self):
         return self.__state_space
 
