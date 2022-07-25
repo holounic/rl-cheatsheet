@@ -2,15 +2,15 @@
 
 ## Tabular solution methods
 
-### [Multi-armed bandits](https://github.com/holounic/rl-cheatsheet/blob/main/code/MultiArmedBandits.ipynb)
+### [Multi-armed bandits](https://github.com/holounic/rl-cheatsheet/blob/main/basics/MultiArmedBandits.ipynb)
 
 ### Finite markov decision process
 
-### [Dynamic programming](https://github.com/holounic/rl-cheatsheet/blob/main/code/DynamicProgramming.ipynb)
+### [Dynamic programming](https://github.com/holounic/rl-cheatsheet/blob/main/basics/DynamicProgramming.ipynb)
 
-### [Monte Carlo methods](https://github.com/holounic/rl-cheatsheet/blob/main/code/MonteCarlo.ipynb)
+### [Monte Carlo methods](https://github.com/holounic/rl-cheatsheet/blob/main/basics/MonteCarlo.ipynb)
 
-### [Temporal-difference learning](https://github.com/holounic/rl-cheatsheet/blob/main/code/TemporalDifference.ipynb)
+### [Temporal-difference learning](https://github.com/holounic/rl-cheatsheet/blob/main/basics/TemporalDifference.ipynb)
 
 ### N-step Bootstrapping
 
