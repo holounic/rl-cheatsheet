@@ -85,3 +85,25 @@ class EpsSoftPolicyFromQ(EpsSoftPolicy):
         probs = [self.eps / self.action_space for _ in range(self.action_space)]
         probs[best_a] = 1 - self.eps + self.eps / self.action_space
         return random.choices(list(range(self.action_space)), probs, k=1)[0]
+
+
+class GreedyPolicyFromQ(DeterministicPolicy):
+    def __init__(self, q, state_space: int, action_space: int):
+        super().__init__(state_space, action_space)
+        self.q = q
+
+    def update(self, s, a):
+        raise Exception(':(')
+
+    def p(self, a, s):
+        q = self.q.loc[self.q[S] == s].reset_index()
+        best_a = q[A].values[q[V].idxmax()].astype(int)
+        return 1 if a == best_a else 0
+
+    def __call__(self, s):
+        q = self.q.loc[self.q[S] == s].reset_index()
+        if len(q) == 0:
+            return random.randint(0, self.action_space - 1)
+        a = q[A].values
+        best_a = a[q[V].idxmax()].astype(int)
+        return best_a
