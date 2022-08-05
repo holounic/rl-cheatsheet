@@ -4,13 +4,17 @@ from rl_util.common import S, A, P, V
 
 
 class Policy:
+    def __init__(self, state_space: int, action_space: int):
+        self.state_space = state_space
+        self.action_space = action_space
+
     def p(self, a, s):
         raise NotImplementedError()
 
 
 class StochasticPolicy(Policy):
     def __init__(self, state_space: int, action_space: int):
-        self.action_space = action_space
+        super().__init__(state_space, action_space)
         self._p = pd.DataFrame({S: [], A: [], P: []})
 
         p = 1 / action_space
@@ -31,6 +35,7 @@ class StochasticPolicy(Policy):
 
 class DeterministicPolicy(Policy):
     def __init__(self, state_space, action_space=None):
+        super().__init__(state_space, action_space)
         if action_space is None:
             self.states = [0 for _ in range(state_space)]
         else:

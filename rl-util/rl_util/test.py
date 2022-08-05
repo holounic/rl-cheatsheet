@@ -1,4 +1,4 @@
-def test_policy(env, policy, max_steps=10):
+def test_policy(env, policy, max_steps=10, verbose=True):
     total_reward = 0
     done = False
     steps = 0
@@ -10,5 +10,6 @@ def test_policy(env, policy, max_steps=10):
         total_reward += reward
         steps += 1
         trajectory.append(state)
-    print(f'Finished in {steps} steps, reward: {total_reward}')
-    return trajectory
+    if verbose:
+        print(f'Finished in {steps} steps, reward: {total_reward}')
+    return trajectory, total_reward, steps

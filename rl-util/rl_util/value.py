@@ -22,3 +22,10 @@ class QFunction:
         if len(result) == 0:
             return 0
         return result[V].values[0]
+
+    def get_max(self, s):
+        possible = self.q.loc[(self.q[S] == s)]
+        if len(possible) == 0:
+            return 0
+        else:
+            return possible[V].max()
