@@ -18,4 +18,7 @@ class QFunction:
         self.q.loc[(self.q[S] == s) & (self.q[A] == a), V] = v
 
     def __call__(self, s, a):
-        return self.q.loc[(self.q[S] == s) & (self.q[A] == a)][V].values[0]
+        result = self.q.loc[(self.q[S] == s) & (self.q[A] == a)]
+        if len(result) == 0:
+            return 0
+        return result[V].values[0]
