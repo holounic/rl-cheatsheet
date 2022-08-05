@@ -12,9 +12,9 @@
 
 ### [Temporal-difference learning](https://github.com/holounic/rl-cheatsheet/blob/main/basics/TemporalDifference.ipynb)
 
-### N-step Bootstrapping
+### [N-step Bootstrapping](https://github.com/holounic/rl-cheatsheet/blob/main/basics/NStepBootstrapping.ipynb)
 
-### Planning and learnign with tabular methods
+### [Planning and learning with tabular methods](https://github.com/holounic/rl-cheatsheet/blob/main/basics/PlanningAndLearningWithTabularMethods.ipynb)
 
 ## Approximate solution method
 
